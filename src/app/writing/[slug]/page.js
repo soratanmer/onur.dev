@@ -1,3 +1,6 @@
+'use cache'
+
+import { cacheLife } from 'next/cache'
 import { draftMode } from 'next/headers'
 import { notFound } from 'next/navigation'
 
@@ -16,6 +19,8 @@ export async function generateStaticParams() {
 }
 
 async function fetchData(slug) {
+  'use cache'
+
   const { isEnabled } = await draftMode()
   const data = await getPost(slug, isDevelopment ? true : isEnabled)
   if (!data) notFound()
@@ -26,6 +31,7 @@ async function fetchData(slug) {
 }
 
 export default async function WritingSlug(props) {
+  cacheLife('max')
   const params = await props.params
   const { slug } = params
   const { data } = await fetchData(slug)

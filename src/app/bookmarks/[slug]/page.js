@@ -1,3 +1,6 @@
+'use cache'
+
+import { cacheLife } from 'next/cache'
 import { notFound } from 'next/navigation'
 import { Suspense } from 'react'
 
@@ -15,6 +18,8 @@ export async function generateStaticParams() {
 }
 
 async function fetchData(slug) {
+  'use cache'
+
   const bookmarks = await getBookmarks()
   const currentBookmark = bookmarks.find((bookmark) => bookmark.slug === slug)
   if (!currentBookmark) notFound()
@@ -30,6 +35,7 @@ async function fetchData(slug) {
 }
 
 export default async function CollectionPage(props) {
+  cacheLife('days')
   const params = await props.params
   const { slug } = params
   const { bookmarks, currentBookmark, bookmarkItems } = await fetchData(slug)

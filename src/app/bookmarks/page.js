@@ -1,4 +1,7 @@
-import Link from 'next/link'
+'use cache'
+
+import { cacheLife } from 'next/cache'
+import NextLink from 'next/link'
 import { Suspense } from 'react'
 
 import { FloatingHeader } from '@/components/floating-header'
@@ -9,12 +12,15 @@ import { getBookmarks } from '@/lib/raindrop'
 import { sortByProperty } from '@/lib/utils'
 
 async function fetchData() {
+  'use cache'
+
   const bookmarks = await getBookmarks()
   const sortedBookmarks = sortByProperty(bookmarks, 'title')
   return { bookmarks: sortedBookmarks }
 }
 
 export default async function Writing() {
+  cacheLife('max')
   const { bookmarks } = await fetchData()
 
   return (
@@ -23,14 +29,14 @@ export default async function Writing() {
       <Suspense fallback={<ScreenLoadingSpinner />}>
         {bookmarks?.map((bookmark) => {
           return (
-            <Link
+            <NextLink
               key={bookmark._id}
               href={`/bookmarks/${bookmark.slug}`}
               className="flex flex-col gap-1 border-b px-4 py-3 text-sm hover:bg-gray-100"
             >
               <span className="font-medium">{bookmark.title}</span>
               <span className="text-slate-500">{bookmark.count} bookmarks</span>
-            </Link>
+            </NextLink>
           )
         })}
       </Suspense>

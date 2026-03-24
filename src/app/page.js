@@ -1,4 +1,7 @@
-import Link from 'next/link'
+'use cache'
+
+import { cacheLife } from 'next/cache'
+import NextLink from 'next/link'
 import { Suspense } from 'react'
 
 import { FloatingHeader } from '@/components/floating-header'
@@ -11,6 +14,8 @@ import { getAllPosts } from '@/lib/contentful'
 import { getItemsByYear, getSortedPosts } from '@/lib/utils'
 
 async function fetchData() {
+  'use cache'
+
   const allPosts = await getAllPosts()
   const sortedPosts = getSortedPosts(allPosts)
   const items = getItemsByYear(sortedPosts)
@@ -18,6 +23,7 @@ async function fetchData() {
 }
 
 export default async function Home() {
+  cacheLife('max')
   const { items } = await fetchData()
 
   return (
@@ -36,9 +42,9 @@ export default async function Home() {
             Developer at Tanbula, and Specialist at Apple.
           </p>
           <Button asChild variant="link" className="inline px-0">
-            <Link href="/writing">
+            <NextLink href="/writing">
               <h2 className="mt-8 mb-4">Writing</h2>
-            </Link>
+            </NextLink>
           </Button>
           <Suspense fallback={<ScreenLoadingSpinner />}>
             <WritingList items={items} header="Writing" />

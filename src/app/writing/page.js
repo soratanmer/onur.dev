@@ -1,3 +1,6 @@
+'use cache'
+
+import { cacheLife } from 'next/cache'
 import { Suspense } from 'react'
 
 import { FloatingHeader } from '@/components/floating-header'
@@ -8,12 +11,15 @@ import { getAllPosts, getPageSeo } from '@/lib/contentful'
 import { getSortedPosts } from '@/lib/utils'
 
 async function fetchData() {
+  'use cache'
+
   const allPosts = await getAllPosts()
   const sortedPosts = getSortedPosts(allPosts)
   return { sortedPosts }
 }
 
 export default async function Writing() {
+  cacheLife('max')
   const { sortedPosts } = await fetchData()
 
   return (

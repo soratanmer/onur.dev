@@ -1,11 +1,13 @@
+'use cache'
+
 import '@/globals.css'
 
-import { SpeedInsights } from '@vercel/speed-insights/next'
 import { GeistMono } from 'geist/font/mono'
 import { GeistSans } from 'geist/font/sans'
-import { EyeIcon } from 'lucide-react'
+import { cacheLife } from 'next/cache'
 import { draftMode } from 'next/headers'
 import Script from 'next/script'
+import { LuEye as EyeIcon } from 'react-icons/lu'
 
 import { sharedMetadata } from '@/app/shared-metadata'
 import { MenuContent } from '@/components/menu-content'
@@ -14,9 +16,8 @@ import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { PROFILES } from '@/lib/constants'
 import { preloadGetAllPosts } from '@/lib/contentful'
 
-export const fetchCache = 'default-cache'
-
 export default async function RootLayout({ children }) {
+  cacheLife('max')
   const { isEnabled } = await draftMode()
   preloadGetAllPosts(isEnabled)
 
@@ -39,14 +40,13 @@ export default async function RootLayout({ children }) {
             </div>
           )}
           <div className="lg:flex">
-            <SideMenu className="relative hidden lg:flex">
+            <SideMenu>
               <MenuContent />
             </SideMenu>
             <div className="flex flex-1">{children}</div>
           </div>
         </main>
         <TailwindIndicator />
-        <SpeedInsights />
         <Script
           src="https://unpkg.com/@tinybirdco/flock.js"
           data-host="https://api.tinybird.co"

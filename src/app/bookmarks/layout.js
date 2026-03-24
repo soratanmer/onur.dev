@@ -1,3 +1,6 @@
+'use cache'
+
+import { cacheLife } from 'next/cache'
 import { Suspense } from 'react'
 
 import { ListItem } from '@/components/list-item'
@@ -8,12 +11,15 @@ import { getBookmarks } from '@/lib/raindrop'
 import { sortByProperty } from '@/lib/utils'
 
 async function fetchData() {
+  'use cache'
+
   const bookmarks = await getBookmarks()
   const sortedBookmarks = sortByProperty(bookmarks, 'title')
   return { bookmarks: sortedBookmarks }
 }
 
 export default async function BookmarksLayout({ children }) {
+  cacheLife('max')
   const { bookmarks } = await fetchData()
 
   return (

@@ -2,8 +2,6 @@ import { Feed } from 'feed'
 
 import { getBookmarkItems, getBookmarks } from '@/lib/raindrop'
 
-export const dynamic = 'force-static'
-
 export async function GET() {
   const bookmarks = await getBookmarks()
   const date = new Date()
@@ -57,7 +55,8 @@ export async function GET() {
 
   return new Response(feed.rss2(), {
     headers: {
-      'Content-Type': 'application/rss+xml; charset=utf-8'
+      'Content-Type': 'application/rss+xml; charset=utf-8',
+      'Cache-Control': 'max-age=172800, stale-while-revalidate=86400'
     }
   })
 }

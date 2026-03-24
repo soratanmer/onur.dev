@@ -1,3 +1,6 @@
+'use cache'
+
+import { cacheLife } from 'next/cache'
 import { Suspense } from 'react'
 
 import { ScreenLoadingSpinner } from '@/components/screen-loading-spinner'
@@ -7,12 +10,15 @@ import { getAllPosts } from '@/lib/contentful'
 import { getSortedPosts } from '@/lib/utils'
 
 async function fetchData() {
+  'use cache'
+
   const allPosts = await getAllPosts()
   const sortedPosts = getSortedPosts(allPosts)
   return { sortedPosts }
 }
 
 export default async function WritingLayout({ children }) {
+  cacheLife('max')
   const { sortedPosts } = await fetchData()
 
   return (
