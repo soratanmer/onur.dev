@@ -19,6 +19,7 @@ export async function generateStaticParams() {
 
 async function fetchData(slug) {
   'use cache'
+  cacheLife('max')
 
   const bookmarks = await getBookmarks()
   const currentBookmark = bookmarks.find((bookmark) => bookmark.slug === slug)
@@ -35,7 +36,7 @@ async function fetchData(slug) {
 }
 
 export default async function CollectionPage(props) {
-  cacheLife('days')
+  cacheLife('max')
   const params = await props.params
   const { slug } = params
   const { bookmarks, currentBookmark, bookmarkItems } = await fetchData(slug)
@@ -61,6 +62,7 @@ export default async function CollectionPage(props) {
 }
 
 export async function generateMetadata(props) {
+  cacheLife('max')
   const params = await props.params
   const { slug } = params
   const bookmarks = await getBookmarks()

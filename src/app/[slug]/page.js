@@ -26,6 +26,7 @@ export async function generateStaticParams() {
 
 async function fetchData(slug) {
   'use cache'
+  cacheLife('max')
 
   const { isEnabled } = await draftMode()
   const page = await getPage(slug, isDevelopment || isEnabled)
@@ -58,6 +59,7 @@ export default async function PageSlug(props) {
 }
 
 export async function generateMetadata(props) {
+  cacheLife('max')
   const params = await props.params
   const { slug } = params
   const seoData = await getPageSeo(slug)

@@ -20,6 +20,7 @@ export async function generateStaticParams() {
 
 async function fetchData(slug) {
   'use cache'
+  cacheLife('max')
 
   const { isEnabled } = await draftMode()
   const data = await getPost(slug, isDevelopment ? true : isEnabled)
@@ -92,6 +93,7 @@ export default async function WritingSlug(props) {
 }
 
 export async function generateMetadata(props) {
+  cacheLife('max')
   const params = await props.params
   const { slug } = params
   const seoData = await getWritingSeo(slug)

@@ -13,6 +13,7 @@ import { sortByProperty } from '@/lib/utils'
 
 async function fetchData() {
   'use cache'
+  cacheLife('max')
 
   const bookmarks = await getBookmarks()
   const sortedBookmarks = sortByProperty(bookmarks, 'title')
@@ -45,6 +46,7 @@ export default async function Writing() {
 }
 
 export async function generateMetadata() {
+  cacheLife('max')
   const seoData = await getPageSeo('bookmarks')
   if (!seoData) return null
 

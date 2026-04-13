@@ -13,6 +13,7 @@ import { getAllLogbook, getPageSeo } from '@/lib/contentful'
 
 async function fetchData() {
   'use cache'
+  cacheLife('max')
 
   const allLogbook = await getAllLogbook()
 
@@ -71,6 +72,7 @@ export default async function Journey() {
 }
 
 export async function generateMetadata() {
+  cacheLife('max')
   const seoData = await getPageSeo('journey')
   if (!seoData) return null
 

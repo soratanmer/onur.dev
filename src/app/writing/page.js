@@ -12,6 +12,7 @@ import { getSortedPosts } from '@/lib/utils'
 
 async function fetchData() {
   'use cache'
+  cacheLife('max')
 
   const allPosts = await getAllPosts()
   const sortedPosts = getSortedPosts(allPosts)
@@ -33,6 +34,7 @@ export default async function Writing() {
 }
 
 export async function generateMetadata() {
+  cacheLife('max')
   const seoData = await getPageSeo('writing')
   if (!seoData) return null
 
